@@ -1,0 +1,23 @@
+AllCops:
+  NewCops:
+    disable
+  Exclude:
+    - snippets.rb
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: 30
