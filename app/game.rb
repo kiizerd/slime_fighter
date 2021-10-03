@@ -9,8 +9,8 @@ class Game
   end
 
   def init_state state
-    state.player  ||= Player.new(args)
-    state.enemies ||= (1..5).map { Enemy.new(args) }
+    state.player  ||= Player.new(state)
+    state.enemies ||= (1..5).map { Enemy.new(state) }
   end
 
   def tick
@@ -18,17 +18,17 @@ class Game
 
     state.player.tick(args)
 
-    state.enemies.first.tick(args)
+    state.enemies.each { |e| e.tick(args) }
+
+    state.enemies << Enemy.new(state) if state.enemies.size < 5
 
     render
   end
 
   def render
     outputs.static_sprites[0] = state.player.sprite
-    outputs.borders << state.player.attack_rect
-    outputs.static_borders[1] = state.player.rect
-    outputs.static_borders[2] = state.enemies.first.rect
-    outputs.static_sprites[1] = state.enemies.first.sprite
+
+    outputs.sprites << state.enemies.map(&:sprite)
 
     outputs.primitives << gtk.current_framerate_primitives
 

@@ -6,8 +6,6 @@ add enemy variation
 
 delete dead enemies
 
-spawn enemies if count falls below certain level
-
 add enemy attack
 
 
@@ -20,3 +18,5 @@ add player health bar
 damage player on enemy attack
 
 
+consider making game a side scroller
+  implement gravity and a ground plane

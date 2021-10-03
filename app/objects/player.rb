@@ -1,18 +1,9 @@
 class Player
-  attr_sprite
-
-  # TODO: Add attack queue!!!
-  # when player presses attack key,
-  # attack gets added to queue
-  # if queue non-empty, perform attacks
-  # limit queue to 3
-  # empty queue if player performs another actions
-  # 5 tick delay between queued actions
   # TODO: extract methods relating to players shape to a Shape module
 
   SPRITE_PATH = 'assets/sprites/player/'.freeze
 
-  def initialize args
+  def initialize state
     # stats
     @max_hp = 5
     @hp     = @max_hp
@@ -34,9 +25,9 @@ class Player
     # animation attributes
     @action_state = :idle
     @action_start = 0
-    @attack_anim_length = 45
+    @attack_anim_length = 35
 
-    @game_state = args.state
+    @game_state = state
   end
 
   def tick args
@@ -80,7 +71,7 @@ class Player
 
     last_added = @attack_queue.last.added_at
 
-    !(0..last_added + 3).include? @game_state.tick_count
+    !(0..last_added + @attack_anim_length - 1).include? @game_state.tick_count
   end
 
   def handle_movekeys inputs
@@ -123,6 +114,7 @@ class Player
 
   def perform_attack
     return unless any_in_melee_range?
+    return if @game_state.tick_count - @last_attack_at >= @attack_anim_length.quarter * 3
 
     enemies_in_range.each(&:hurt)
   end
@@ -164,22 +156,30 @@ class Player
 
   def collide_top?
     top_rect = { x: top[0][0] + 5, y: top[0][1] + 5, w: rect.w - 6, h: 1 }
-    $game.geometry.intersect_rect? top_rect, @game_state.enemies.first.rect
+    @game_state.enemies.any? do |enem|
+      $game.geometry.intersect_rect? top_rect, enem.rect
+    end
   end
 
   def collide_left?
     left_rect = { x: left[0][0] - 5, y: left[0][1] + 5, w: 1, h: rect.h - 5 }
-    $game.geometry.intersect_rect? left_rect, @game_state.enemies.first.rect
+    @game_state.enemies.any? do |enem|
+      $game.geometry.intersect_rect? left_rect, enem.rect
+    end
   end
 
   def collide_right?
     right_rect = { x: right[0][0] + 5, y: right[0][1] + 5, w: 1, h: rect.h - 5 }
-    $game.geometry.intersect_rect? right_rect, @game_state.enemies.first.rect
+    @game_state.enemies.any? do |enem|
+      $game.geometry.intersect_rect? right_rect, enem.rect
+    end
   end
 
   def collide_bottom?
     bottom_rect = { x: bottom[0][0] + 5, y: bottom[0][1] - 5, w: rect.w - 6, h: 1 }
-    $game.geometry.intersect_rect? bottom_rect, @game_state.enemies.first.rect
+    @game_state.enemies.any? do |enem|
+      $game.geometry.intersect_rect? bottom_rect, enem.rect
+    end
   end
 
   def top

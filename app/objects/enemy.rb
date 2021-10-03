@@ -5,7 +5,7 @@ class Enemy
 
   attr_accessor :dir, :x, :y, :w, :h, :action_state, :r, :g ,:b, :a
 
-  def initialize args, spawner=nil
+  def initialize state, spawner=nil
     # stats
     @max_hp = 1
     @hp = @max_hp
@@ -13,8 +13,8 @@ class Enemy
     @move_speed = 3
 
     # sprite attributes
-    @x = args.grid.right.half
-    @y = args.grid.top.half
+    @x = rand(1280) || args.grid.right.half
+    @y = rand(720)  || args.grid.top.half
     @w = 64
     @h = 64
     @dir = 4
@@ -33,7 +33,7 @@ class Enemy
       hurt: { weight: -1 }
     }
 
-    @game_state = args.state
+    @game_state = state
   end
 
   def tick args
@@ -51,7 +51,6 @@ class Enemy
                     :idle
 
     perform @action_state
-    puts @action_state
   end
 
   def perform action
@@ -59,13 +58,16 @@ class Enemy
     when :idle # then puts 'enemy idling'
     when :roam # then puts 'enemy roaming'
     when :seek then approach_player
-    when :hurt then puts "anythin"
+    when :hurt then die
     end
   end
 
   def hurt
     @actions[:hurt][:weight] = 3
-    puts 'hmm'
+  end
+
+  def die
+    @game_state.enemies.delete(self) if @game_state.tick_count - @hurt_started_at >= 35
   end
 
   def approach_player
@@ -175,7 +177,6 @@ class Enemy
     tile_index = @action_start.frame_index(4, 8, true) || 0
     @hurt_started_at ||= @game_state.tick_count
     ease = $gtk.args.easing.ease(@hurt_started_at, @game_state.tick_count, 35, :cube)
-    puts "ease: #{ease}"
     {
       path: "assets/sprites/enemy/slimes/slime-med-blue.png",
       tile_x: 0 + (tile_index * 32),
