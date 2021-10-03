@@ -43,7 +43,7 @@ class Player
       elsif inputs.keyboard.key_down.space
         handle_spacebar_down(inputs)
       end
-    elsif inputs.directional_vector && !inputs.keyboard.space && @action_state != :atck
+    elsif inputs.directional_vector
       handle_movekeys(inputs)
     else
       @started_holding_at = nil
@@ -56,7 +56,7 @@ class Player
     add_attack_to_queue if @attack_queue.size <= 3
   end
 
-  def handle_spacebar_held inputs
+  def handle_spacebar_held _inputs
     @started_holding_at ||= @game_state.tick_count
     time_held = @game_state.tick_count - @started_holding_at
 
@@ -99,7 +99,7 @@ class Player
     @dir = -1 if inputs.left
   end
 
-  def process_attacks inputs
+  def process_attacks _inputs
     next_attack if attack_over? && !@attack_queue.empty?
 
     if @attack_queue.empty?
@@ -109,7 +109,6 @@ class Player
       @action_state = :atck
       perform_attack
     end
-    @attack_queue = [@attack_queue.first] if inputs.directional_vector && @attack_queue.first
   end
 
   def perform_attack
