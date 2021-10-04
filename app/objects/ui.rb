@@ -61,7 +61,7 @@ class UI
     player = state.player
     score  = player.score
     text   = "Score: #{score}"
-    w, h   = gtk.calcstringbox text
+    w, _h  = gtk.calcstringbox text
     x      = grid.right.half - w.half
     y      = grid.top - 20
 
