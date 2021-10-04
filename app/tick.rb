@@ -2,7 +2,6 @@
 def tick args
   $game       ||= Game.new(args)
   $game.args  ||= args
-  $game.state ||= args.state
   $game.tick
 
   if args.state.tick_count <= 0
