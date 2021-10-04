@@ -1,9 +1,10 @@
 class Enemy
+  # TODO: add random color selection on initialize to correspond to rng enem seed
+  # TODO: add size for same
+  # TODO: implement roam method
+  @enem_count = 0
 
-  # TODO - add random color selection on initialize to correspond to 
-  # TODO - add size
-
-  attr_accessor :dir, :x, :y, :w, :h, :action_state, :r, :g ,:b, :a
+  attr_accessor :dir, :x, :y, :w, :h, :action_state, :id
 
   def initialize state, spawner=nil
     # stats
@@ -42,7 +43,7 @@ class Enemy
     determine_action(args)
   end
 
-  def determine_action args
+  def determine_action _args
     @actions[:seek][:weight] = dist_from_player >= 350 ? 0 : 2
 
     @action_state = @actions.find { |_a, prop| prop.weight == 3 }&.first ||
@@ -67,7 +68,15 @@ class Enemy
   end
 
   def die
-    @game_state.enemies.delete(self) if @game_state.tick_count - @hurt_started_at >= 35
+    return false unless @hurt_started_at
+
+    time_passed = @game_state.tick_count - @hurt_started_at
+    @game_state.enemies.delete(self) if time_passed > 35
+
+    return if @dead
+
+    @dead = true
+    @game_state.player.score += 1
   end
 
   def approach_player
@@ -124,7 +133,14 @@ class Enemy
 
   # make rect half sized to ensure sprite fills rect
   def rect
-    { x: @x + @w.quarter, y: @y + @h.quarter + 3, w: @w.half, h: @h.half - 6 }
+    if @dead
+      [@x, @y, 0, 0]
+    else
+      {
+        x: @x + @w.quarter, y: @y + @h.quarter + 3,
+        w: @w.half, h: @h.half - 6
+      }
+    end
   end
 
   def sprite
