@@ -18,6 +18,18 @@ Layout/SpaceAroundEqualsInParameterDefault:
 
 Style/Documentation:
   Enabled: false
-
+  
 Metrics/AbcSize:
   Enabled: 30
+
+Metrics/PerceivedComplexity:
+  Enabled: 15
+
+Metrics/CyclomaticComplexity:
+  Enabled: 10
+
+Metrics/ClassLength:
+  Enabled: 250
+
+Metrics/MethodLength:
+  Enabled: 15
