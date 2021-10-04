@@ -6,7 +6,7 @@ class Enemy
 
   attr_accessor :dir, :x, :y, :w, :h, :action_state, :id
 
-  def initialize state, spawner=nil
+  def initialize state, _spawner=nil
     # stats
     @max_hp = 1
     @hp = @max_hp
@@ -56,8 +56,8 @@ class Enemy
 
   def perform action
     case action
-    when :idle # then puts 'enemy idling'
-    when :roam # then puts 'enemy roaming'
+    when :idle then 1 # puts 'enemy idling'
+    when :roam then 1 # puts 'enemy roaming'
     when :seek then approach_player
     when :hurt then die
     end
@@ -131,7 +131,7 @@ class Enemy
     [@x + @w.half, @y + @h.half]
   end
 
-  # make rect half sized to ensure sprite fills rect
+  # make rect half sized to ensure sprite fills rect or null rect if @dead
   def rect
     if @dead
       [@x, @y, 0, 0]
