@@ -1,1 +1,1 @@
-Action Game made with the DragonRuby Game ToolKit.
+Arcade Game made with the DragonRuby Game ToolKit.
