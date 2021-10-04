@@ -1,5 +1,8 @@
 class Player
   # TODO: extract methods relating to players shape to a Shape module
+  # TODO: extract collision methods to Collider module
+
+  attr_accessor :max_hp, :hp, :atk_speed, :move_speed, :score
 
   SPRITE_PATH = 'assets/sprites/player/'.freeze
 
@@ -9,6 +12,7 @@ class Player
     @hp     = @max_hp
     @atk_speed  = 10
     @move_speed = 4
+    @score = 0
 
     # attack attributes
     @attack_queue = []
@@ -25,7 +29,7 @@ class Player
     # animation attributes
     @action_state = :idle
     @action_start = 0
-    @attack_anim_length = 35
+    @attack_anim_length = (@atk_speed * 3.5).floor
 
     @game_state = state
   end
