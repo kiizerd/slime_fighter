@@ -7,6 +7,8 @@ require "#{OBJ}player.rb"
 
 require "#{OBJ}enemy.rb"
 
+require "#{OBJ}ui.rb"
+
 require "#{APP}game.rb"
 
 require "#{APP}tick.rb"
