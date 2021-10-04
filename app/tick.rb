@@ -7,6 +7,7 @@ def tick args
 
   if args.state.tick_count <= 0
     $game = Game.new(args)
+    $game.ui.args = args
   end
 end
 # rubocop:enable Style/GlobalVars
