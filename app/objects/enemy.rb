@@ -14,8 +14,8 @@ class Enemy
     @move_speed = 3
 
     # sprite attributes
-    @x = rand(1280) || args.grid.right.half
-    @y = rand(720)  || args.grid.top.half
+    @x = rand(1260).floor || args.grid.right.half
+    @y = rand(700).floor  || args.grid.top.half
     @w = 64
     @h = 64
     @dir = 4
